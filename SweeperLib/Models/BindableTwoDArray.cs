@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace SweeperLib.Models
@@ -10,6 +11,24 @@ namespace SweeperLib.Models
     public class BindableTwoDArray<T> : ObservableObject
     {
         private readonly T[,] _data;
+        
+        public int Rows { get; private set; }
+        
+        public int Cols { get; private set; }
+
+        public List<T> GetNeighbors(int r, int c)
+        {
+            int lbRow = Math.Max(r - 1, 0);
+            int ubRow = Math.Min(r + 1, Rows);
+            int lbCol = Math.Max(c - 1, 0);
+            int ubCol = Math.Min(c + 1, Cols);
+
+            var lst = new List<T>();
+            for (int row = lbRow; row <= ubRow; row++)
+                for (int col = lbCol; col <= ubCol; col++)
+                    lst.Add(this[row,col]);
+            return lst;
+        }
 
         protected BindableTwoDArray()
         {
